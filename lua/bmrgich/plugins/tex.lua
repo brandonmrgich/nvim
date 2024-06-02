@@ -1,0 +1,2 @@
+return {}
+--TODO: Latex config
