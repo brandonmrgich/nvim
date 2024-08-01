@@ -3,7 +3,6 @@ return {
 	event = { "BufReadPre", "BufNewFile" },
 	config = function()
 		local lint = require("lint")
-
 		lint.linters_by_ft = {
 			javascript = { "eslint_d" },
 			typescript = { "eslint_d" },
@@ -13,7 +12,7 @@ return {
 			python = { "pylint" },
 			ansible = { "ansible-lint" },
 			cpp = { "cpplint" },
-			html = { "hlint", "htmlhint" },
+			html = { "hlint" }, --"htmlhint"
 			json = { "jsonlint" },
 			-- TODO: Fix lua check
 			-- lua = { "luacheck" },
