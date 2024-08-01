@@ -1,3 +1,11 @@
+local vim = vim
+local pattern = "[^:]+:(%d+):(%d+)-(%d+): %((%a)(%d+)%) (.*)"
+local groups = { "lnum", "col", "end_col", "severity", "code", "message" }
+local severities = {
+	W = vim.diagnostic.severity.WARN,
+	E = vim.diagnostic.severity.ERROR,
+}
+
 return {
 	"mfussenegger/nvim-lint",
 	event = { "BufReadPre", "BufNewFile" },
@@ -14,14 +22,39 @@ return {
 			cpp = { "cpplint" },
 			html = { "hlint" }, --"htmlhint"
 			json = { "jsonlint" },
-			-- TODO: Fix lua check
-			-- lua = { "luacheck" },
+			lua = { "luacheck" },
 			markdown = { "markdownlint" },
 			ruby = { "ruby" },
 			swift = { "swiftlint" },
 			zsh = { "zsh" },
 		}
-
+		lint.linters = {
+			luacheck = {
+				name = "luacheck",
+				cmd = "luacheck",
+				stdin = true,
+				args = {
+					"--globals",
+					"vim",
+					"lvim",
+					"reload",
+					"--",
+					"--formatter",
+					"plain",
+					"--codes",
+					"--ranges",
+					"-",
+				},
+				ignore_exitcode = true,
+				parser = require("lint.parser").from_pattern(
+					pattern,
+					groups,
+					severities,
+					{ ["source"] = "luacheck" },
+					{ end_col_offset = 0 }
+				),
+			},
+		}
 		local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
 
 		vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {

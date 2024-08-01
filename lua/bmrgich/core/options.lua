@@ -1,5 +1,8 @@
 local opt = vim.opt
 
+vim.g.python3_host_prog = "~/.config/nvim/venv/bin/python3"
+vim.g.loaded_perl_provider = "/opt/homebrew/bin/perl"
+
 -- line numbers
 opt.relativenumber = true
 opt.number = true
@@ -24,7 +27,7 @@ opt.cursorline = true
 -- appearance
 -------------
 
--- turn on termguicolors for nighfly colorscheme to worok
+-- turn on termguicolors for nighfly colorscheme to work
 -- (must use true color terminal i.e. iterm2)
 opt.termguicolors = true
 opt.background = "dark"
@@ -55,3 +58,15 @@ vim.g.netrw_keepdir = 0
 vim.g.netrw_winsize = 30
 vim.g.netrw_banner = 0
 vim.g.netrw_localcopydircmd = "cp -r"
+
+opt.syntax = "on"
+opt.encoding = "UTF-8"
+opt.ruler = true
+opt.mouse = "a"
+opt.title = true
+opt.hidden = true
+opt.ttimeoutlen = 0
+opt.wildmenu = true
+opt.showcmd = true
+opt.showmatch = true
+opt.inccommand = "split"
