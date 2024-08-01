@@ -1,4 +1,3 @@
--- TODO: Familiarize with these movements
 return {
 	"lewis6991/gitsigns.nvim",
 	event = { "BufReadPre", "BufNewFile" },

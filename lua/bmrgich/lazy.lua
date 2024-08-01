@@ -11,17 +11,14 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup(
-	{ { import = "bmrgich.plugins" }, { import = "bmrgich.plugins.lsp" }, { import = "bmrgich.plugins.theme" } },
-	{
-		-- Use lualine to show pending plugin updates through lazy.nvim
-		checker = {
-			enabled = true,
-			notify = false,
-		},
-		-- Ignore the change detection notification
-		change_detection = {
-			notify = false,
-		},
-	}
-)
+require("lazy").setup({ { import = "bmrgich.plugins" }, { import = "bmrgich.plugins.lsp" } }, {
+	-- Use lualine to show pending plugin updates through lazy.nvim
+	checker = {
+		enabled = true,
+		notify = false,
+	},
+	-- Ignore the change detection notification
+	change_detection = {
+		notify = false,
+	},
+})
