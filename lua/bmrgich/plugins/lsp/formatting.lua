@@ -19,7 +19,7 @@ return {
 				graphql = { "prettier" },
 				liquid = { "prettier" },
 				lua = { "stylua" },
-				python = { "isort", "black" },
+				python = { "pyright" }, --, "black" }, "isort"
 				cpp = { "astyle" },
 				c = { "astyle" },
 				java = { "astyle" },
@@ -35,18 +35,18 @@ return {
 			},
 			-- Config per formatter
 			formatters = {
-				prettier = {
-					args = { "--print-width", "100" },
-				},
-				black = {
-					args = { "--line-length", "100" },
-				},
-				astyle = {
-					args = { "--max-code-length", "100" },
-				},
-				shfmt = {
-					args = { "-i", "100" },
-				},
+				-- prettier = {
+				-- 	args = { "--print-width", "100" },
+				-- },
+				-- black = {
+				-- 	args = { "--line-length", "100" },
+				-- },
+				-- astyle = {
+				-- 	args = { "--max-code-length", "100" },
+				-- },
+				-- shfmt = {
+				-- 	args = { "-i", "100" },
+				-- },
 			},
 		})
 

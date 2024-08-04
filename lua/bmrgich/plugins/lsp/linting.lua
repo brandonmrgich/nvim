@@ -14,7 +14,7 @@ return {
 			javascriptreact = { "eslint_d" },
 			typescriptreact = { "eslint_d" },
 			svelte = { "eslint_d" },
-			python = { "ruff" },
+			python = { "pylint" },
 			cpp = { "cpplint" },
 			html = { "htmlhint" },
 			json = { "jsonlint" },
@@ -33,7 +33,7 @@ return {
 				local linters = lint.linters_by_ft[filetype] or {}
 				if #linters > 0 then
 					lint.try_lint()
-					-- print("Linting " .. filetype .. " with: " .. table.concat(linters, ", "))
+					--print("Linting " .. filetype .. " with: " .. table.concat(linters, ", "))
 				else
 					print("No linters configured for filetype: " .. filetype)
 				end
@@ -43,24 +43,5 @@ return {
 		vim.keymap.set("n", "<leader>l", function()
 			lint.try_lint()
 		end, { desc = "Trigger linting for current file" })
-		--
-		-- Limit the number of diagnostics shown
-		--vim.diagnostic.config({
-		--	virtual_text = {
-		--		prefix = "●", -- Could be '■', '▎', 'x'
-		--		spacing = 4,
-		--		severity_limit = "Warning", -- Only show warnings and errors
-		--	},
-		--	signs = true,
-		--	underline = true,
-		--	update_in_insert = false,
-		--	severity_sort = true,
-		--	float = {
-		--		border = "rounded",
-		--		source = "always",
-		--		header = "",
-		--		prefix = "",
-		--	},
-		--})
 	end,
 }
