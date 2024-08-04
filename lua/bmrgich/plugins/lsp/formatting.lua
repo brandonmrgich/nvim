@@ -19,7 +19,7 @@ return {
 				graphql = { "prettier" },
 				liquid = { "prettier" },
 				lua = { "stylua" },
-				python = { "isort", "black" }, -- `isort` is typically used for sorting imports, not for formatting
+				python = { "isort", "black" },
 				cpp = { "astyle" },
 				c = { "astyle" },
 				java = { "astyle" },
@@ -34,7 +34,20 @@ return {
 				timeout_ms = 1000, -- Formatting timeout in milliseconds
 			},
 			-- Config per formatter
-			formatters = {},
+			formatters = {
+				prettier = {
+					args = { "--print-width", "100" },
+				},
+				black = {
+					args = { "--line-length", "100" },
+				},
+				astyle = {
+					args = { "--max-code-length", "100" },
+				},
+				shfmt = {
+					args = { "-i", "100" },
+				},
+			},
 		})
 
 		vim.keymap.set({ "n", "v" }, "<leader>mp", function()

@@ -17,10 +17,18 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-require("lazy").setup({ { import = "bmrgich.plugins" }, { import = "bmrgich.plugins.lsp" } }, {
+require("lazy").setup({
+	{ import = "bmrgich.plugins" },
+	{ import = "bmrgich.plugins.lsp" },
+	{ import = "bmrgich.plugins.ui" },
+	{ import = "bmrgich.plugins.util" },
+}, {
+
 	-- colorscheme that will be used when installing plugins.
 	install = { colorscheme = { "habamax" } },
+
 	-- Use lualine to show pending plugin updates through lazy.nvim
+	-- Import Lazy.nvim
 	checker = {
 		enabled = true,
 		notify = false,

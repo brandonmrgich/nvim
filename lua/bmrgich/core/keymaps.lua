@@ -21,6 +21,25 @@ keymap.set("n", "x", '"_x')
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
 keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
 
+-- Error and warning display
+vim.diagnostic.config({
+	virtual_text = true,
+	float = {
+		focusable = true,
+		style = "minimal",
+		border = "rounded",
+		source = "always",
+		header = "",
+		prefix = "",
+	},
+	signs = true,
+	underline = true,
+	update_in_insert = true,
+	severity_sort = false,
+})
+
+keymap.set("n", "<leader>d", vim.diagnostic.open_float)
+
 -------------------------------------------------------------------------------
 -- Buffer Management
 -------------------------------------------------------------------------------

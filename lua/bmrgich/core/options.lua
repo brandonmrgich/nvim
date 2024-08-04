@@ -48,11 +48,17 @@ vim.g.bigfile_size = 1024 * 1024 * 1.5 -- 1.5 MB
 
 -- Show the current document symbols location from Trouble in lualine
 -- You can disable this for a buffer by setting `vim.b.trouble_lualine = false`
+
 vim.g.trouble_lualine = true
 
 -------------------------------------------------------------------------------
 -- General options
 -------------------------------------------------------------------------------
+
+-- Set text width for comments
+opt.textwidth = 100
+opt.formatoptions:append("t") -- Auto wrap text
+opt.formatoptions:append("c") -- Format comments
 
 -- line numbers
 opt.relativenumber = true

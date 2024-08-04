@@ -1,9 +1,35 @@
 local vim = vim
-local util = require("bmrgich.core.util")
 
 local function augroup(name)
 	return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
 end
+
+-------------------------------------------------------------------------------
+-- Set up autocmd to open diagnostic float on CursorHold if there is a non-normal diagnostic
+--
+vim.api.nvim_create_autocmd("CursorHold", {
+	callback = function()
+		-- Get diagnostics for the current line
+		local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
+
+		-- Check if there are diagnostics and if any of them are non-normal
+		for _, diag in ipairs(diagnostics) do
+			if diag.severity ~= vim.diagnostic.severity.INFO then
+				-- Open the float window for the diagnostic
+				vim.diagnostic.open_float()
+				return
+			end
+		end
+	end,
+	-- Apply this autocmd to all file types
+	pattern = "*",
+	-- Specify the event
+	group = vim.api.nvim_create_augroup("DiagnosticsAutoFloat", { clear = true }),
+})
+
+-- Optional: Set the CursorHold delay (default is 1000 ms)
+vim.o.updatetime = 1000
+-------------------------------------------------------------------------------
 
 -- Check if we need to reload the file when it changed
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {

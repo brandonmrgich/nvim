@@ -1,5 +1,3 @@
--- This file should be placed in lua/bmrgich/plugins/lsp/jdtls.lua
-
 return {
 	"mfussenegger/nvim-jdtls",
 	ft = "java",
