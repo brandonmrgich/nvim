@@ -1,71 +1,66 @@
 local vim = vim
-local pattern = "[^:]+:(%d+):(%d+)-(%d+): %((%a)(%d+)%) (.*)"
-local groups = { "lnum", "col", "end_col", "severity", "code", "message" }
-local severities = {
-	W = vim.diagnostic.severity.WARN,
-	E = vim.diagnostic.severity.ERROR,
-}
 
+-- linting.lua
 return {
 	"mfussenegger/nvim-lint",
+	dependencies = {},
 	event = { "BufReadPre", "BufNewFile" },
 	config = function()
 		local lint = require("lint")
+
 		lint.linters_by_ft = {
 			javascript = { "eslint_d" },
 			typescript = { "eslint_d" },
 			javascriptreact = { "eslint_d" },
 			typescriptreact = { "eslint_d" },
 			svelte = { "eslint_d" },
-			python = { "pylint" },
-			ansible = { "ansible-lint" },
+			python = { "ruff" },
 			cpp = { "cpplint" },
-			html = { "hlint" }, --"htmlhint"
+			html = { "htmlhint" },
 			json = { "jsonlint" },
 			lua = { "luacheck" },
 			markdown = { "markdownlint" },
-			ruby = { "ruby" },
-			swift = { "swiftlint" },
-			zsh = { "zsh" },
+			zsh = { "shellcheck" },
+			sh = { "shellcheck" },
 		}
-		lint.linters = {
-			luacheck = {
-				name = "luacheck",
-				cmd = "luacheck",
-				stdin = true,
-				args = {
-					"--globals",
-					"vim",
-					"lvim",
-					"reload",
-					"--",
-					"--formatter",
-					"plain",
-					"--codes",
-					"--ranges",
-					"-",
-				},
-				ignore_exitcode = true,
-				parser = require("lint.parser").from_pattern(
-					pattern,
-					groups,
-					severities,
-					{ ["source"] = "luacheck" },
-					{ end_col_offset = 0 }
-				),
-			},
-		}
+
 		local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
 
 		vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
 			group = lint_augroup,
 			callback = function()
-				lint.try_lint()
+				local filetype = vim.bo.filetype
+				local linters = lint.linters_by_ft[filetype] or {}
+				if #linters > 0 then
+					lint.try_lint()
+					-- print("Linting " .. filetype .. " with: " .. table.concat(linters, ", "))
+				else
+					print("No linters configured for filetype: " .. filetype)
+				end
 			end,
 		})
 
 		vim.keymap.set("n", "<leader>l", function()
 			lint.try_lint()
 		end, { desc = "Trigger linting for current file" })
+		--
+		-- Limit the number of diagnostics shown
+		--vim.diagnostic.config({
+		--	virtual_text = {
+		--		prefix = "●", -- Could be '■', '▎', 'x'
+		--		spacing = 4,
+		--		severity_limit = "Warning", -- Only show warnings and errors
+		--	},
+		--	signs = true,
+		--	underline = true,
+		--	update_in_insert = false,
+		--	severity_sort = true,
+		--	float = {
+		--		border = "rounded",
+		--		source = "always",
+		--		header = "",
+		--		prefix = "",
+		--	},
+		--})
 	end,
 }
