@@ -22,6 +22,6 @@ return {
 		})
 	end,
 	keys = {
-		{ ",v", "<cmd>VenvSelect<cr>" },
+		{ ",v", "<cmd>VenvSelect<cr> <cmd>LspRestart<cr>" },
 	},
 }

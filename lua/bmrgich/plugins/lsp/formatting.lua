@@ -19,7 +19,7 @@ return {
 				graphql = { "prettier" },
 				liquid = { "prettier" },
 				lua = { "stylua" },
-				python = { "basedpyright", "pyright" }, --, "black", "isort", "pyright"
+				python = { "ruff", "black", "isort" }, --, "black", "isort", "pyright"
 				cpp = { "astyle" },
 				c = { "astyle" },
 				java = { "astyle" },

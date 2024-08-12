@@ -31,11 +31,11 @@ require("lazy").setup({
 	-- Import Lazy.nvim
 	checker = {
 		enabled = true,
-		notify = false,
+		notify = true,
 	},
 	-- Ignore the change detection notification
 	change_detection = {
-		notify = false,
+		notify = true,
 	},
 	performance = {
 		rtp = {

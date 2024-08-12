@@ -21,6 +21,7 @@ return {
 		})
 
 		mason_lspconfig.setup({
+			--
 			ensure_installed = {
 				"tsserver",
 				"html",
@@ -35,6 +36,7 @@ return {
 				"jdtls",
 				-- "rust_analyzer",
 				"basedpyright",
+				"pylyzer",
 			},
 			automatic_installation = true,
 		})
@@ -45,7 +47,7 @@ return {
 				"prettier",
 				"stylua",
 				"isort",
-				"basedpyright",
+				-- "basedpyright",
 				"beautysh",
 				"clang-format",
 				-- "rust_analyzer",

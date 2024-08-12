@@ -36,7 +36,7 @@ return {
 				local linters = lint.linters_by_ft[filetype] or {}
 				if #linters > 0 then
 					lint.try_lint()
-					--print("Linting " .. filetype .. " with: " .. table.concat(linters, ", "))
+					-- print("Linting " .. filetype .. " with: " .. table.concat(linters, ", "))
 				else
 					print("No linters configured for filetype: " .. filetype)
 				end
