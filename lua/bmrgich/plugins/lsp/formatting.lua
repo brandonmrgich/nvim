@@ -19,7 +19,7 @@ return {
 				graphql = { "prettier" },
 				liquid = { "prettier" },
 				lua = { "stylua" },
-				python = { "pyright" }, --, "black" }, "isort"
+				python = { "basedpyright", "pyright" }, --, "black", "isort", "pyright"
 				cpp = { "astyle" },
 				c = { "astyle" },
 				java = { "astyle" },
@@ -27,6 +27,7 @@ return {
 				csharp = { "astyle" },
 				sh = { "shfmt" },
 				zsh = { "shfmt" },
+				-- rust = { "rust_analyzer", "bacon_ls" },
 			},
 			format_on_save = {
 				lsp_fallback = true, -- Use LSP if available for formatting
@@ -34,6 +35,7 @@ return {
 				timeout_ms = 1000, -- Formatting timeout in milliseconds
 			},
 			-- Config per formatter
+
 			formatters = {
 				-- prettier = {
 				-- 	args = { "--print-width", "100" },

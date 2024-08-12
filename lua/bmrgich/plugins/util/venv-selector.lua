@@ -11,8 +11,11 @@ return {
 		require("venv-selector").setup({
 			settings = {
 				search = {
+					-- cwd = {
+					--     command = ""
+					-- },
 					my_venvs = {
-						command = "fd python$ ~/",
+						command = "fd python$ $CWD --full-path --color never -E /proc -I -a -L",
 					},
 				},
 			},

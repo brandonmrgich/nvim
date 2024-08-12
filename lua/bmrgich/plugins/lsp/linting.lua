@@ -3,7 +3,9 @@ local vim = vim
 -- linting.lua
 return {
 	"mfussenegger/nvim-lint",
-	dependencies = {},
+	-- dependencies = {
+	-- 	"linux-cultist/venv-selector.nvim",
+	-- },
 	event = { "BufReadPre", "BufNewFile" },
 	config = function()
 		local lint = require("lint")
@@ -14,7 +16,7 @@ return {
 			javascriptreact = { "eslint_d" },
 			typescriptreact = { "eslint_d" },
 			svelte = { "eslint_d" },
-			python = { "pylint" },
+			python = { "pylint", "ruff" }, -- pylint -- ruff
 			cpp = { "cpplint" },
 			html = { "htmlhint" },
 			json = { "jsonlint" },
@@ -22,6 +24,7 @@ return {
 			markdown = { "markdownlint" },
 			zsh = { "shellcheck" },
 			sh = { "shellcheck" },
+			-- rust = { "rust_analyzer", "ast_grep" },
 		}
 
 		local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })

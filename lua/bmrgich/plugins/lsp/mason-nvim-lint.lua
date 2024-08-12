@@ -8,7 +8,7 @@ return {
 	ensure_installed = {
 		"eslint_d",
 		"ruff",
-		"ansible-lint",
+		"ansible_lint",
 		"cpplint",
 		"htmlhint",
 		"jsonlint",
@@ -16,6 +16,10 @@ return {
 		"markdownlint",
 		"swiftlint",
 		"shellcheck",
+		"pylint",
+		"basedpyright",
+		-- "rust_analyzer",
+		-- "ast_grep",
 	},
 
 	config = function()
