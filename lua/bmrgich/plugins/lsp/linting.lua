@@ -16,7 +16,7 @@ return {
 			javascriptreact = { "eslint_d" },
 			typescriptreact = { "eslint_d" },
 			svelte = { "eslint_d" },
-			python = { "pylint", "ruff" }, -- pylint -- ruff
+			python = { "ruff" }, -- pylint -- ruff
 			cpp = { "cpplint" },
 			html = { "htmlhint" },
 			json = { "jsonlint" },
@@ -24,6 +24,8 @@ return {
 			markdown = { "markdownlint" },
 			zsh = { "shellcheck" },
 			sh = { "shellcheck" },
+			yaml = { "yamllint" },
+			dockerfile = { "hadolint" },
 			-- rust = { "rust_analyzer", "ast_grep" },
 		}
 

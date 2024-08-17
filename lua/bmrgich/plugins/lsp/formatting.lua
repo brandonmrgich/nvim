@@ -14,12 +14,12 @@ return {
 				css = { "prettier" },
 				html = { "prettier" },
 				json = { "prettier" },
-				yaml = { "prettier" },
+				yaml = { "yamlfmt" },
 				markdown = { "prettier" },
 				graphql = { "prettier" },
 				liquid = { "prettier" },
 				lua = { "stylua" },
-				python = { "ruff", "black", "isort" }, --, "black", "isort", "pyright"
+				python = { "ruff" }, --, "black", "isort", "pyright"
 				cpp = { "astyle" },
 				c = { "astyle" },
 				java = { "astyle" },

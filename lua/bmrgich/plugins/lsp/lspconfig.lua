@@ -75,6 +75,25 @@ return {
 			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 		end
 
+		local function setup_python_lsp(server_name)
+			lspconfig[server_name].setup({
+				capabilities = capabilities,
+				on_attach = function(client, bufnr)
+					vim.api.nvim_create_autocmd("FileType", {
+						pattern = "python",
+						callback = function()
+							vim.cmd("VenvSelect")
+						end,
+					})
+					local venv_path = os.getenv("VIRTUAL_ENV")
+					if venv_path then
+						client.config.settings.python.pythonPath = venv_path .. "/bin/python"
+						client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+					end
+				end,
+			})
+		end
+
 		mason_lspconfig.setup_handlers({
 			-- default handler for installed servers
 			function(server_name)
@@ -82,6 +101,10 @@ return {
 					capabilities = capabilities,
 				})
 			end,
+			["pyright"] = setup_python_lsp,
+			["basedpyright"] = setup_python_lsp,
+			["pylyzer"] = setup_python_lsp,
+
 			["svelte"] = function()
 				-- configure svelte server
 				lspconfig["svelte"].setup({

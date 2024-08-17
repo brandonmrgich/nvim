@@ -34,9 +34,10 @@ return {
 				"prismals",
 				"pyright",
 				"jdtls",
+				"dockerls",
 				-- "rust_analyzer",
 				"basedpyright",
-				"pylyzer",
+				--"pylyzer",
 			},
 			automatic_installation = true,
 		})
