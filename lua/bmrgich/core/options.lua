@@ -69,7 +69,10 @@ opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
 opt.autoindent = true
-opt.wrap = false -- line wrapping
+
+-- TODO: Change
+opt.wrap = true -- line wrapping
+
 opt.linebreak = true -- Wrap lines at convenient points
 
 -- search settings

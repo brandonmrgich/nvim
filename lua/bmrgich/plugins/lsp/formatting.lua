@@ -19,7 +19,7 @@ return {
 				graphql = { "prettier" },
 				liquid = { "prettier" },
 				lua = { "stylua" },
-				python = { "ruff" }, --, "black", "isort", "pyright"
+				python = { "black" }, --, "black", "isort", "pyright", "ruff"
 				cpp = { "astyle" },
 				c = { "astyle" },
 				java = { "astyle" },
@@ -37,9 +37,22 @@ return {
 			-- Config per formatter
 
 			formatters = {
-				-- prettier = {
-				-- 	args = { "--print-width", "100" },
-				-- },
+				-- TODO: Make quotes persist
+				prettier = {
+					args = {
+						"--stdin-filepath",
+						"$FILENAME",
+						"--single-quote",
+						"--tab-width",
+						"4",
+						"--trailing-comma",
+						"es5",
+						"--print-width",
+						"100",
+						"--quote-props",
+						"consistent",
+					},
+				},
 				-- black = {
 				-- 	args = { "--line-length", "100" },
 				-- },
