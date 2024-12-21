@@ -19,7 +19,7 @@ return {
 				graphql = { "prettier" },
 				liquid = { "prettier" },
 				lua = { "stylua" },
-				python = { "black" }, --, "black", "isort", "pyright", "ruff"
+				python = { "pyright" }, --, "black", "isort", "pyright", "ruff"
 				cpp = { "astyle" },
 				c = { "astyle" },
 				java = { "astyle" },
@@ -53,15 +53,15 @@ return {
 						"consistent",
 					},
 				},
-				-- black = {
-				-- 	args = { "--line-length", "100" },
-				-- },
-				-- astyle = {
-				-- 	args = { "--max-code-length", "100" },
-				-- },
-				-- shfmt = {
-				-- 	args = { "-i", "100" },
-				-- },
+				black = {
+					args = { "--line-length", "100" },
+				},
+				astyle = {
+					args = { "--max-code-length", "100" },
+				},
+				shfmt = {
+					args = { "-i", "100" },
+				},
 			},
 		})
 

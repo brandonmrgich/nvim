@@ -55,7 +55,7 @@ return {
 				-- Linters
 				"eslint_d",
 				"ruff",
-				--"pyright",
+				"pyright",
 				"cpplint",
 				"htmlhint",
 				"jsonlint",

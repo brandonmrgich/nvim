@@ -17,7 +17,7 @@ return {
 			typescriptreact = { "eslint_d" },
 			css = { "eslint_d" }, -- prettier
 			svelte = { "eslint_d" },
-			python = { "flake" }, -- pylint -- ruff -- basedpyright -- flake
+			python = { "flake8" }, -- pylint -- ruff -- basedpyright -- flake
 			cpp = { "cpplint" },
 			html = { "htmlhint" },
 			json = { "jsonlint" },

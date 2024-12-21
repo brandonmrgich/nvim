@@ -5,5 +5,6 @@ return {
 	config = function()
 		vim.cmd("colorscheme tokyodark")
 		--vim.cmd("colorscheme retrobox")
+		--vim.cmd("colorscheme habamax")
 	end,
 }
