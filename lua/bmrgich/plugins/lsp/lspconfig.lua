@@ -104,9 +104,9 @@ return {
 
 			-- Python specific setup for virtual envs
 			["pyright"] = setup_python_lsp,
-			["black"] = setup_python_lsp,
-			["flake"] = setup_python_lsp,
-			["flake8"] = setup_python_lsp,
+			--["black"] = setup_python_lsp,
+			--["flake"] = setup_python_lsp,
+			--["flake8"] = setup_python_lsp,
 			--["ruff"] = setup_python_lsp,
 			--["basedpyright"] = setup_python_lsp,
 			--["pylyzer"] = setup_python_lsp,
