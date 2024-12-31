@@ -16,7 +16,7 @@ return {
 		"markdownlint",
 		"swiftlint",
 		"shellcheck",
-		--"pyright",
+		"pyright",
 		--"pylint",
 		-- "basedpyright",
 		-- "rust_analyzer",

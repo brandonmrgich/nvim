@@ -60,8 +60,11 @@ return {
 					args = { "--max-code-length", "100" },
 				},
 				shfmt = {
-					args = { "-i", "100" },
+					args = { "-i", "4" },
 				},
+				--pyright = {
+				--	args = { "--line-length", "100" },
+				--},
 			},
 		})
 

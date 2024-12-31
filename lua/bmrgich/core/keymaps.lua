@@ -131,3 +131,18 @@ keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clea
 
 -- Clear search, diff update, and redraw
 keymap.set("n", "<leader>ur", "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>", { desc = "Redraw Screen" })
+
+-- Play an audio file currently under the cursor
+vim.keymap.set("n", "<leader>p", function()
+	local line = vim.fn.getline(".") -- Get the full line under the cursor
+	local file = line:match(".*| (.+)$") -- Match everything after the final "| "
+	if not file then
+		vim.notify("No valid file found on the current line", vim.log.levels.ERROR)
+		return
+	end
+	local escaped_file = vim.fn.shellescape(file)
+	vim.cmd("!play " .. escaped_file)
+end, { desc = "Play audio file after '| ' on the current line" })
+--
+--
+--
