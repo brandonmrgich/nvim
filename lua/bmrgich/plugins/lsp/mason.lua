@@ -23,7 +23,7 @@ return {
 		mason_lspconfig.setup({
 			--
 			ensure_installed = {
-				"tsserver",
+				"ts_ls",
 				"html",
 				"cssls",
 				"tailwindcss",
@@ -42,12 +42,15 @@ return {
 			automatic_installation = true,
 		})
 
-		mason_tool_installer.setup({
-			ensure_installed = {
+		local ensure_tools = {
 				-- Formatters
 				"prettier",
 				"stylua",
+				"black",
 				"isort",
+				"shfmt",
+				"yamlfmt",
+				"google-java-format",
 				--"basedpyright",
 				"beautysh",
 				"clang-format",
@@ -55,16 +58,25 @@ return {
 				-- Linters
 				"eslint_d",
 				"ruff",
-				"pyright",
+				"yamllint",
 				"cpplint",
 				"htmlhint",
 				"jsonlint",
 				"luacheck",
 				"markdownlint",
 				"shellcheck",
+				"hadolint",
 				"bacon",
 				"ast_grep",
-			},
+		}
+
+		-- csharpier is a dotnet tool; only attempt install if dotnet exists.
+		if vim.fn.exepath("dotnet") ~= "" then
+			table.insert(ensure_tools, "csharpier")
+		end
+
+		mason_tool_installer.setup({
+			ensure_installed = ensure_tools,
 			auto_update = true,
 			run_on_start = true,
 			automatic_installation = true,

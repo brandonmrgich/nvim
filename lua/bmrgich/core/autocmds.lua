@@ -1,7 +1,7 @@
 local vim = vim
 
 local function augroup(name)
-	return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
+	return vim.api.nvim_create_augroup("bmrgich_" .. name, { clear = true })
 end
 
 -------------------------------------------------------------------------------
@@ -26,9 +26,6 @@ vim.api.nvim_create_autocmd("CursorHold", {
 	-- Specify the event
 	group = vim.api.nvim_create_augroup("DiagnosticsAutoFloat", { clear = true }),
 })
-
--- Optional: Set the CursorHold delay (default is 1000 ms)
-vim.o.updatetime = 1000
 -------------------------------------------------------------------------------
 
 -- Check if we need to reload the file when it changed

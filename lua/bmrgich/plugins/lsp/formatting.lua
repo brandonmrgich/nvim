@@ -4,6 +4,8 @@ return {
 	config = function()
 		local conform = require("conform")
 
+		local has_csharpier = vim.fn.executable("csharpier") == 1
+
 		conform.setup({
 			formatters_by_ft = {
 				javascript = { "prettier" },
@@ -19,12 +21,12 @@ return {
 				graphql = { "prettier" },
 				liquid = { "prettier" },
 				lua = { "stylua" },
-				python = { "pyright" }, --, "black", "isort", "pyright", "ruff"
-				cpp = { "astyle" },
-				c = { "astyle" },
-				java = { "astyle" },
-				objectivec = { "astyle" },
-				csharp = { "astyle" },
+				python = { "isort", "black" },
+				cpp = { "clang_format" },
+				c = { "clang_format" },
+				java = { "google_java_format" },
+				objectivec = { "clang_format" },
+				csharp = has_csharpier and { "csharpier" } or {},
 				sh = { "shfmt" },
 				zsh = { "shfmt" },
 				-- rust = { "rust_analyzer", "bacon_ls" },
@@ -55,9 +57,6 @@ return {
 				},
 				black = {
 					args = { "--line-length", "100" },
-				},
-				astyle = {
-					args = { "--max-code-length", "100" },
 				},
 				shfmt = {
 					args = { "-i", "4" },

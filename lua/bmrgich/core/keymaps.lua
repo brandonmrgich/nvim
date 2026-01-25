@@ -1,9 +1,6 @@
 local vim = vim
 local keymap = vim.keymap
 
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
-
 -------------------------------------------------------------------------------
 -- General Keymaps
 -------------------------------------------------------------------------------
@@ -38,7 +35,7 @@ vim.diagnostic.config({
 	severity_sort = false,
 })
 
-keymap.set("n", "<leader>d", vim.diagnostic.open_float)
+keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
 
 -------------------------------------------------------------------------------
 -- Buffer Management
@@ -47,7 +44,7 @@ keymap.set("n", "<leader>d", vim.diagnostic.open_float)
 -- Change buffers
 keymap.set("n", "<Leader>j", ":bp<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
 keymap.set("n", "<Leader>k", ":bn<CR>", { noremap = true, silent = true, desc = "Next buffer" })
-keymap.set("n", "<Leader>d", ":bd<CR>", { noremap = true, silent = true, desc = "Delete buffer" })
+keymap.set("n", "<leader>bd", ":bd<CR>", { noremap = true, silent = true, desc = "Delete buffer" })
 keymap.set("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 
