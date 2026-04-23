@@ -1,32 +1,28 @@
-local vim = vim
-
 local function augroup(name)
 	return vim.api.nvim_create_augroup("bmrgich_" .. name, { clear = true })
 end
 
--------------------------------------------------------------------------------
--- Set up autocmd to open diagnostic float on CursorHold if there is a non-normal diagnostic
---
-vim.api.nvim_create_autocmd("CursorHold", {
-	callback = function()
-		-- Get diagnostics for the current line
-		local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
-
-		-- Check if there are diagnostics and if any of them are non-normal
-		for _, diag in ipairs(diagnostics) do
-			if diag.severity ~= vim.diagnostic.severity.INFO then
-				-- Open the float window for the diagnostic
-				vim.diagnostic.open_float()
-				return
-			end
+-- Treesitter safeguard: catch parser errors instead of crashing
+vim.treesitter.start = (function(orig)
+	return function(...)
+		local ok = pcall(orig, ...)
+		if not ok then
+			vim.notify("Treesitter failed to start", vim.log.levels.WARN)
 		end
-	end,
-	-- Apply this autocmd to all file types
+	end
+end)(vim.treesitter.start)
+
+-- Show diagnostic float on CursorHold (non-intrusive, no focus steal)
+vim.api.nvim_create_autocmd("CursorHold", {
+	group = augroup("diagnostics_auto_float"),
 	pattern = "*",
-	-- Specify the event
-	group = vim.api.nvim_create_augroup("DiagnosticsAutoFloat", { clear = true }),
+	callback = function()
+		vim.diagnostic.open_float(nil, {
+			focusable = false,
+			close_events = { "BufLeave", "CursorMoved", "InsertEnter" },
+		})
+	end,
 })
--------------------------------------------------------------------------------
 
 -- Check if we need to reload the file when it changed
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
@@ -38,7 +34,7 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 	end,
 })
 
--- resize splits if window got resized
+-- Resize splits if window got resized
 vim.api.nvim_create_autocmd({ "VimResized" }, {
 	group = augroup("resize_splits"),
 	callback = function()
@@ -48,16 +44,16 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
 	end,
 })
 
--- go to last loc when opening a buffer
+-- Go to last cursor location when opening a buffer
 vim.api.nvim_create_autocmd("BufReadPost", {
 	group = augroup("last_loc"),
 	callback = function(event)
 		local exclude = { "gitcommit" }
 		local buf = event.buf
-		if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].lazyvim_last_loc then
+		if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].bmrgich_last_loc then
 			return
 		end
-		vim.b[buf].lazyvim_last_loc = true
+		vim.b[buf].bmrgich_last_loc = true
 		local mark = vim.api.nvim_buf_get_mark(buf, '"')
 		local lcount = vim.api.nvim_buf_line_count(buf)
 		if mark[1] > 0 and mark[1] <= lcount then
@@ -66,7 +62,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	end,
 })
 
--- close some filetypes with <q>
+-- Close some filetypes with <q>
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup("close_with_q"),
 	pattern = {
@@ -96,7 +92,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- make it easier to close man-files when opened inline
+-- Make man pages unlisted
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup("man_unlisted"),
 	pattern = { "man" },
@@ -105,7 +101,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- wrap and check for spell in text filetypes
+-- Wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup("wrap_spell"),
 	pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
@@ -124,7 +120,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 	end,
 })
 
--- Auto create dir when saving a file, in case some intermediate directory does not exist
+-- Auto create dir when saving a file
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	group = augroup("auto_create_dir"),
 	callback = function(event)
@@ -136,6 +132,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	end,
 })
 
+-- BigFile detection: set filetype to "bigfile" for files > bigfile_size
 vim.filetype.add({
 	pattern = {
 		[".*"] = {
@@ -151,10 +148,12 @@ vim.filetype.add({
 	},
 })
 
+-- BigFile handler: disable heavy features for large files
 vim.api.nvim_create_autocmd({ "FileType" }, {
 	group = augroup("bigfile"),
 	pattern = "bigfile",
 	callback = function(ev)
+		vim.b[ev.buf].large_file = true
 		vim.b.minianimate_disable = true
 		vim.schedule(function()
 			vim.bo[ev.buf].syntax = vim.filetype.match({ buf = ev.buf }) or ""
