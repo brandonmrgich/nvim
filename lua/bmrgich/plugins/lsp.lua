@@ -124,7 +124,6 @@ return {
 			{ "folke/lazydev.nvim", opts = {} },
 		},
 		config = function()
-			local lspconfig = require("lspconfig")
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 			local capabilities = cmp_nvim_lsp.default_capabilities()
@@ -183,13 +182,13 @@ return {
 				end,
 			})
 
-			-- Setup each server explicitly (no mason dynamic handlers)
+			-- Configure each server via vim.lsp.config (nvim 0.11+, replaces lspconfig[name].setup)
 			for name, server_opts in pairs(servers) do
-				local config = vim.tbl_deep_extend("force", {
+				vim.lsp.config(name, vim.tbl_deep_extend("force", {
 					capabilities = capabilities,
-				}, server_opts)
-				lspconfig[name].setup(config)
+				}, server_opts))
 			end
+			vim.lsp.enable(vim.tbl_keys(servers))
 		end,
 	},
 

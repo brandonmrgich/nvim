@@ -205,11 +205,11 @@ return {
 		event = "VeryLazy",
 	},
 
-	-- Colorizer: inline color preview
+	-- Colorizer: inline color preview (catgoose fork — maintained, fixes vim.tbl_flatten deprecation)
 	{
-		"norcalli/nvim-colorizer.lua",
+		"catgoose/nvim-colorizer.lua",
 		event = "VeryLazy",
-		opts = { "*" },
+		opts = { filetypes = { "*" } },
 	},
 
 	-- Indent guides
