@@ -221,4 +221,46 @@ return {
 			indent = { char = "┊" },
 		},
 	},
+
+	-- Markdown rendering: rich in-buffer display for .md files
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		ft = { "markdown" },
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons",
+		},
+		init = function()
+			-- Neovim 0.12.1 bug: TSNode:range() is nil on stale nodes produced
+			-- by the markdown injection query (fenced code block language detection).
+			-- Clearing the injection query prevents the crash. render-markdown
+			-- handles code block rendering through its own pipeline.
+			vim.treesitter.query.set("markdown", "injections", "")
+		end,
+		opts = {
+			heading = {
+				enabled = true,
+				sign = false,
+				icons = { "# ", "## ", "### ", "#### ", "##### ", "###### " },
+			},
+			code = {
+				enabled = true,
+				sign = false,
+				style = "full",
+				width = "block",
+				border = "thin",
+			},
+			bullet = { enabled = true },
+			checkbox = { enabled = true },
+			table = { enabled = true },
+		},
+		keys = {
+			{
+				"<leader>tm",
+				"<cmd>RenderMarkdown toggle<cr>",
+				ft = "markdown",
+				desc = "Toggle Markdown Render",
+			},
+		},
+	},
 }
