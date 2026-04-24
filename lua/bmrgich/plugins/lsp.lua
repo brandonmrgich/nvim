@@ -333,14 +333,6 @@ return {
 		config = function()
 			local lint = require("lint")
 
-			-- Project-local ESLint resolution for monorepo/TurboRepo awareness
-			local eslint = lint.linters.eslint_d
-			if eslint then
-				eslint.cwd = function()
-					return vim.fn.getcwd()
-				end
-			end
-
 			lint.linters_by_ft = {
 				javascript = { "eslint_d" },
 				typescript = { "eslint_d" },
