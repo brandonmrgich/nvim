@@ -29,6 +29,34 @@ return {
 			{ "<leader>gD", "<cmd>DiffviewClose<cr>", desc = "Close git diff view" },
 			{ "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File git history" },
 		},
+		config = function()
+			require("diffview").setup()
+
+			local augroup = vim.api.nvim_create_augroup("DiffviewAutoRefresh", { clear = true })
+
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "DiffviewViewOpened",
+				group = augroup,
+				callback = function()
+					vim.api.nvim_create_autocmd({ "BufWritePost", "FocusGained", "ShellCmdPost" }, {
+						group = vim.api.nvim_create_augroup("DiffviewRefreshOnChange", { clear = true }),
+						callback = function()
+							if require("diffview.lib").get_current_view() then
+								vim.cmd("DiffviewRefresh")
+							end
+						end,
+					})
+				end,
+			})
+
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "DiffviewViewClosed",
+				group = augroup,
+				callback = function()
+					vim.api.nvim_create_augroup("DiffviewRefreshOnChange", { clear = true })
+				end,
+			})
+		end,
 	},
 
 	-- LazyGit: git TUI
