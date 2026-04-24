@@ -168,6 +168,23 @@ return {
 					opts.desc = "Show line diagnostics"
 					vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
 
+					opts.desc = "Yank line diagnostics to clipboard"
+					vim.keymap.set("n", "<leader>yd", function()
+						local diags = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
+						if #diags == 0 then
+							vim.notify("No diagnostics on this line", vim.log.levels.INFO)
+							return
+						end
+						local lines = {}
+						for _, d in ipairs(diags) do
+							table.insert(lines, d.message)
+						end
+						local text = table.concat(lines, "\n")
+						vim.fn.setreg('"', text)
+						vim.fn.setreg("+", text)
+						vim.notify("Yanked " .. #diags .. " diagnostic(s)", vim.log.levels.INFO)
+					end, opts)
+
 					opts.desc = "Go to previous diagnostic"
 					vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 
