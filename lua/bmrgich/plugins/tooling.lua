@@ -19,6 +19,18 @@ return {
 		},
 	},
 
+	-- Diffview: side-by-side diff viewer for working tree and git history
+	{
+		"sindrets/diffview.nvim",
+		cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
+		dependencies = { "nvim-lua/plenary.nvim" },
+		keys = {
+			{ "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Open git diff view" },
+			{ "<leader>gD", "<cmd>DiffviewClose<cr>", desc = "Close git diff view" },
+			{ "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File git history" },
+		},
+	},
+
 	-- LazyGit: git TUI
 	{
 		"kdheepak/lazygit.nvim",

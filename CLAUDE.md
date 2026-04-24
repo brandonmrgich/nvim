@@ -79,6 +79,7 @@ return {
 ```
 
 Rules:
+
 - Prefer `opts` over `config` when the plugin supports it
 - No `pcall` wrappers for dependencies guaranteed by lazy.nvim
 - Only use `pcall` for optional external integrations
@@ -88,25 +89,29 @@ Rules:
 
 All LSP-related plugins live in `plugins/lsp.lua`:
 
-| Layer | Plugin |
-|---|---|
-| Server installer | mason.nvim |
-| Server bridge | mason-lspconfig.nvim |
-| Server config | nvim-lspconfig (explicit per-server setup) |
-| Completion | nvim-cmp + LuaSnip |
-| Formatting | conform.nvim |
-| Linting | nvim-lint |
-| Java-specific | nvim-jdtls |
+| Layer            | Plugin                                     |
+| ---------------- | ------------------------------------------ |
+| Server installer | mason.nvim                                 |
+| Server bridge    | mason-lspconfig.nvim                       |
+| Server config    | nvim-lspconfig (explicit per-server setup) |
+| Completion       | nvim-cmp + LuaSnip                         |
+| Formatting       | conform.nvim                               |
+| Linting          | nvim-lint                                  |
+| Java-specific    | nvim-jdtls                                 |
 
-Server configs are defined in the `servers` table at the top of `lsp.lua`. Each server is set up explicitly — no mason dynamic handlers at runtime.
+Server configs are defined in the `servers` table at the top of `lsp.lua`.
+Each server is set up explicitly — no mason dynamic handlers at runtime.
 
 ### Python Provider
 
 The Python3 provider points to a local venv:
-```
+
+```sh
 <config-dir>/venv/bin/python3   (created by install.sh)
 ```
-`options.lua` sets `g.python3_host_prog` using `vim.fn.stdpath("config")`. `venv-selector.nvim` handles per-project venv switching at runtime.
+
+`options.lua` sets `g.python3_host_prog` using `vim.fn.stdpath("config")`.
+`venv-selector.nvim` handles per-project venv switching at runtime.
 
 ### BigFile Guard
 
@@ -119,6 +124,7 @@ The Python3 provider points to a local venv:
 ### Health Check
 
 Run `:checkhealth bmrgich` to verify:
+
 - Python provider availability
 - Active LSP clients
 - Plugin load count and startup time
@@ -126,17 +132,17 @@ Run `:checkhealth bmrgich` to verify:
 
 ## Key Keybindings Reference
 
-| Key | Action |
-|---|---|
-| `jk` (insert) | Escape to normal |
-| `<leader>e` | Open Netrw |
-| `<leader>ff/fr/fs/fc` | Telescope: files / recent / grep / word |
-| `<leader>bash` | Floating terminal |
-| `<C-h/j/k/l>` | Navigate splits (tmux-aware) |
-| `gd / gR / gi / gt` | LSP: definition / references / impl / type |
-| `<leader>ca / rn` | LSP: code action / rename |
-| `[d / ]d` | Prev/next diagnostic |
-| `[h / ]h` | Prev/next git hunk |
+| Key                   | Action                                     |
+| --------------------- | ------------------------------------------ |
+| `jk` (insert)         | Escape to normal                           |
+| `<leader>e`           | Open Netrw                                 |
+| `<leader>ff/fr/fs/fc` | Telescope: files / recent / grep / word    |
+| `<leader>bash`        | Floating terminal                          |
+| `<C-h/j/k/l>`         | Navigate splits (tmux-aware)               |
+| `gd / gR / gi / gt`   | LSP: definition / references / impl / type |
+| `<leader>ca / rn`     | LSP: code action / rename                  |
+| `[d / ]d`             | Prev/next diagnostic                       |
+| `[h / ]h`             | Prev/next git hunk                         |
 
 ## Adding New Plugins
 
