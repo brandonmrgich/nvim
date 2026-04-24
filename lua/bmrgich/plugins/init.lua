@@ -1,5 +1,4 @@
--- Core dependencies
-return {
-	"nvim-lua/plenary.nvim", -- lua functions that many plugins use
-	"christoomey/vim-tmux-navigator", -- tmux & split window navigation
-}
+-- Plugin index: lazy.nvim auto-imports all .lua files in this directory.
+-- This file is intentionally empty; each domain file (deps, lsp, ui, etc.)
+-- returns its own list of plugin specs.
+return {}

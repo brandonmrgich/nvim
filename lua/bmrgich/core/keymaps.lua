@@ -1,8 +1,4 @@
-local vim = vim
 local keymap = vim.keymap
-
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
 
 -------------------------------------------------------------------------------
 -- General Keymaps
@@ -21,24 +17,28 @@ keymap.set("n", "x", '"_x')
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
 keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
 
--- Error and warning display
+-- Diagnostics UX: visible, readable, non-intrusive
 vim.diagnostic.config({
-	virtual_text = true,
-	float = {
-		focusable = true,
-		style = "minimal",
-		border = "rounded",
-		source = "always",
-		header = "",
-		prefix = "",
+	virtual_text = {
+		spacing = 2,
+		prefix = "●",
+		format = function(diagnostic)
+			return diagnostic.message:sub(1, 80)
+		end,
 	},
 	signs = true,
 	underline = true,
-	update_in_insert = true,
-	severity_sort = false,
+	update_in_insert = false,
+	severity_sort = true,
+	float = {
+		border = "rounded",
+		source = "always",
+		focusable = false,
+		style = "minimal",
+	},
 })
 
-keymap.set("n", "<leader>d", vim.diagnostic.open_float)
+keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
 
 -------------------------------------------------------------------------------
 -- Buffer Management
@@ -47,7 +47,7 @@ keymap.set("n", "<leader>d", vim.diagnostic.open_float)
 -- Change buffers
 keymap.set("n", "<Leader>j", ":bp<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
 keymap.set("n", "<Leader>k", ":bn<CR>", { noremap = true, silent = true, desc = "Next buffer" })
-keymap.set("n", "<Leader>d", ":bd<CR>", { noremap = true, silent = true, desc = "Delete buffer" })
+keymap.set("n", "<leader>bd", ":bd<CR>", { noremap = true, silent = true, desc = "Delete buffer" })
 keymap.set("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 
@@ -110,6 +110,9 @@ keymap.set("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
 -- Open Netrw Explorer
 keymap.set("n", "<leader>e", "<cmd>Exp<CR>", { desc = "Open Netrw Explorer" })
 
+-- Claude Code
+keymap.set("n", "<leader>ac", "<cmd>ClaudeCode<CR>", { desc = "Open Claude Code" })
+
 -- Zathura (Latex display)
 keymap.set("n", "<leader>za", ':lua require("zathura").OpenPdf()<CR>', { noremap = true, silent = true })
 
@@ -143,6 +146,3 @@ vim.keymap.set("n", "<leader>p", function()
 	local escaped_file = vim.fn.shellescape(file)
 	vim.cmd("!play " .. escaped_file)
 end, { desc = "Play audio file after '| ' on the current line" })
---
---
---
