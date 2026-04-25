@@ -92,15 +92,23 @@ return {
 				"cpplint",
 				"htmlhint",
 				"jsonlint",
-				"luacheck",
 				"markdownlint",
 				"shellcheck",
 				"hadolint",
-				"bacon",
 				"ast_grep",
 			}
 
-			if vim.fn.exepath("dotnet") ~= "" then
+			-- Host-toolchain-dependent tools: only ask Mason to install when
+			-- the underlying installer is on PATH (luarocks for luacheck,
+			-- cargo for bacon, dotnet for csharpier). Avoids hard install
+			-- failures on machines without those toolchains.
+			if vim.fn.executable("luarocks") == 1 then
+				table.insert(ensure_tools, "luacheck")
+			end
+			if vim.fn.executable("cargo") == 1 then
+				table.insert(ensure_tools, "bacon")
+			end
+			if vim.fn.executable("dotnet") == 1 then
 				table.insert(ensure_tools, "csharpier")
 			end
 
