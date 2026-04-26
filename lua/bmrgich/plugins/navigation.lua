@@ -45,6 +45,24 @@ return {
 		end,
 	},
 
+	-- Vim-vinegar: netrw enhancements
+	{
+		"tpope/vim-vinegar",
+		init = function()
+			vim.g.netrw_banner = 0
+			vim.g.netrw_liststyle = 3
+
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = "netrw",
+				callback = function()
+					local opts = { buffer = true, remap = true, silent = true }
+					vim.keymap.set("n", "h", "-", opts)
+					vim.keymap.set("n", "l", "<CR>", opts)
+				end,
+			})
+		end,
+	},
+
 	-- Vim-maximizer: toggle split maximization
 	{
 		"szw/vim-maximizer",
