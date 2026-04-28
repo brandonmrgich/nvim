@@ -88,6 +88,12 @@ if &laststatus < 2
     set laststatus=2
 endif
 
+" Neovim-only UI niceties
+if has('nvim')
+    set inccommand=split
+    set pumblend=10
+endif
+
 " Timeouts
 set timeoutlen=300
 set updatetime=200
