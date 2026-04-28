@@ -113,6 +113,9 @@ keymap.set("n", "<leader>e", "<cmd>Exp<CR>", { desc = "Open Netrw Explorer" })
 -- Claude Code
 keymap.set("n", "<leader>ac", "<cmd>ClaudeCode<CR>", { desc = "Open Claude Code" })
 
+-- Health check
+keymap.set("n", "<leader>ch", "<cmd>checkhealth<CR>", { desc = "Check health" })
+
 -- Zathura (Latex display)
 keymap.set("n", "<leader>za", ':lua require("zathura").OpenPdf()<CR>', { noremap = true, silent = true })
 
