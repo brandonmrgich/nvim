@@ -409,7 +409,9 @@ return {
 			"williamboman/mason.nvim",
 			"mfussenegger/nvim-lint",
 		},
-		opts = {},
+		-- luacheck on Mason builds via luarocks; we use the system binary
+		-- at /usr/bin/luacheck instead, so skip Mason install attempts.
+		opts = { ignore_install = { "luacheck" } },
 	},
 
 	-- typescript-tools: better TS performance and monorepo awareness

@@ -1,4 +1,5 @@
 local M = {}
+local vim = vim
 
 M.check = function()
 	vim.health.start("bmrgich config")
