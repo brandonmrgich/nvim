@@ -110,6 +110,9 @@ keymap.set("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
 -- Open Netrw Explorer
 keymap.set("n", "<leader>e", "<cmd>Exp<CR>", { desc = "Open Netrw Explorer" })
 
+-- Health check
+keymap.set("n", "<leader>h", "<cmd>checkhealth bmrgich<CR>", { desc = "Run :checkhealth bmrgich" })
+
 -- Claude Code
 keymap.set("n", "<leader>ac", "<cmd>ClaudeCode<CR>", { desc = "Open Claude Code" })
 
