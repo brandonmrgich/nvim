@@ -209,9 +209,12 @@ return {
 
 			-- Configure each server via vim.lsp.config (nvim 0.11+, replaces lspconfig[name].setup)
 			for name, server_opts in pairs(servers) do
-				vim.lsp.config(name, vim.tbl_deep_extend("force", {
-					capabilities = capabilities,
-				}, server_opts))
+				vim.lsp.config(
+					name,
+					vim.tbl_deep_extend("force", {
+						capabilities = capabilities,
+					}, server_opts)
+				)
 			end
 			vim.lsp.enable(vim.tbl_keys(servers))
 		end,
@@ -389,6 +392,11 @@ return {
 				dockerfile = { "hadolint" },
 			}
 
+			lint.linters.markdownlint.args = {
+				"--config",
+				vim.fn.stdpath("config") .. "/.markdownlint.json",
+			}
+
 			vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
 				group = vim.api.nvim_create_augroup("lint", { clear = true }),
 				callback = function()
@@ -475,10 +483,7 @@ return {
 
 				local paths = get_jdtls_paths()
 				if not paths then
-					vim.notify(
-						"jdtls not found via Mason. Install it with :Mason.",
-						vim.log.levels.WARN
-					)
+					vim.notify("jdtls not found via Mason. Install it with :Mason.", vim.log.levels.WARN)
 					return
 				end
 
@@ -500,11 +505,16 @@ return {
 						"-Dlog.level=ALL",
 						"-Xmx1g",
 						"--add-modules=ALL-SYSTEM",
-						"--add-opens", "java.base/java.util=ALL-UNNAMED",
-						"--add-opens", "java.base/java.lang=ALL-UNNAMED",
-						"-jar", paths.launcher_jar,
-						"-configuration", paths.config_dir,
-						"-data", workspace_dir,
+						"--add-opens",
+						"java.base/java.util=ALL-UNNAMED",
+						"--add-opens",
+						"java.base/java.lang=ALL-UNNAMED",
+						"-jar",
+						paths.launcher_jar,
+						"-configuration",
+						paths.config_dir,
+						"-data",
+						workspace_dir,
 					},
 					root_dir = root_dir,
 					settings = {
