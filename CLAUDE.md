@@ -31,6 +31,26 @@ nvim --startuptime startup.log
 :Lazy profile
 ```
 
+## Release cadence
+
+Every change set lands as a `vX.Y` tag plus a matching GitHub release with hand-written notes. Don't stop at the commit. Applies to every change, including doc-only edits to this file.
+
+### Minor vs major
+
+- **Minor bump (`vX.Y` → `vX.Y+1`)** — the default. Use for: a new plugin, a new LSP server, a keymap change, a bug fix, a version-compat patch, a clipboard/provider tweak, doc updates. Cohesive but not architectural.
+  *Examples from history:* v3.1 (added git diff viewer + treesitter nil-value patch), v3.5 (keymap reshuffle + LSP/Mason robustness), v3.6 (OSC 52 clipboard inside tmux).
+- **Major bump (`vX.Y` → `v(X+1).0`)** — only for structural redesigns. Use for: namespace reorganization, switching plugin manager (e.g. Packer → lazy.nvim), splitting `plugins/` into a different layout, opinionated direction shifts, breaking changes to how config files relate to each other.
+  *Example from history:* v3.0 — "Large refactor for an easier-to-maintain setup" with ESLint config and CWD awareness.
+
+When in doubt, minor. A pile of minors is fine; major bumps should feel deliberate.
+
+### Steps after committing to `main`
+
+1. Confirm the next number: `git tag --sort=-creatordate | head`.
+2. Annotated tag: `git tag -a vX.Y -m "vX.Y: <one-line scope>" <commit>`.
+3. Push tag: `git push origin vX.Y`.
+4. Release: `gh release create vX.Y --title "vX.Y" --notes "..."` — match the existing prose style (lede sentence, sectioned bullets, `**Full changelog:** https://github.com/brandonmrgich/nvim/compare/<prev>...vX.Y` footer). The latest release is the canonical style reference.
+
 ## Architecture
 
 ### Entry Point & Load Order
