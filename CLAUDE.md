@@ -117,9 +117,13 @@ The Python3 provider points to a local venv:
 
 `core/autocmds.lua` detects files >1.5MB, sets filetype to `bigfile` and `vim.b.large_file = true`, then disables syntax highlighting. Plugins can check `vim.b.large_file` to skip heavy processing.
 
-### SSH Clipboard
+### Clipboard
 
-`core/options.lua` conditionally sets `clipboard = "unnamedplus"` only when `SSH_TTY` is not set, avoiding clipboard issues over SSH.
+`core/options.lua` picks one of three modes:
+
+- **SSH (`$SSH_TTY` set):** clipboard left empty — yanks stay in unnamed register, no provider attempted. Avoids the "no clipboard tool" error spam over SSH.
+- **Tmux (`$TMUX` set, not SSH):** force OSC 52 provider via `vim.ui.clipboard.osc52`. Path is nvim → OSC 52 → tmux → terminal → system clipboard, robust against pbcopy/xclip auto-detection quirks. Requires `set -g set-clipboard on` in tmux and an OSC-52-capable terminal (iTerm2, kitty, WezTerm, Ghostty — *not* Apple Terminal.app).
+- **Otherwise:** nvim auto-detects (pbcopy on macOS, xclip/wl-copy on Linux).
 
 ### Health Check
 
