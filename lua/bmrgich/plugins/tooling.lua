@@ -30,7 +30,75 @@ return {
 			{ "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File git history" },
 		},
 		config = function()
-			require("diffview").setup()
+			require("diffview").setup({
+				file_panel = {
+					tree_options = {
+						folder_statuses = "only_folded",
+					},
+				},
+				hooks = {
+					-- Shrink the left (old) window to a sliver when viewing a
+					-- new/added file. Closing it outright breaks diffview's
+					-- layout invariants and triggers a recover/flicker cycle on
+					-- every file switch, so we just collapse the width instead.
+					diff_buf_win_enter = function(bufnr, winid, ctx)
+						local view = require("diffview.lib").get_current_view()
+						if not view or not view.cur_entry then
+							return
+						end
+						local a = view.cur_entry.layout.a
+						local b = view.cur_entry.layout.b
+						local a_nulled = a and a.file and a.file.nulled
+						local b_nulled = b and b.file and b.file.nulled
+
+						if ctx.symbol == "a" and a_nulled and not b_nulled then
+							vim.schedule(function()
+								if vim.api.nvim_win_is_valid(winid) then
+									vim.api.nvim_win_set_width(winid, 1)
+									vim.wo[winid].foldcolumn = "0"
+									vim.wo[winid].signcolumn = "no"
+									vim.wo[winid].number = false
+									vim.wo[winid].relativenumber = false
+								end
+							end)
+						end
+					end,
+				},
+			})
+
+			-- Subtle status colors for the file panel. Diffview's defaults link
+			-- to diffAdded/diffChanged/diffRemoved, which habamax leaves muted
+			-- enough to disappear; override directly with a calmer palette.
+			local function apply_diffview_hl()
+				local groups = {
+					added = { "DiffviewStatusAdded", "DiffviewStatusUntracked", "DiffviewFilePanelInsertions" },
+					modified = {
+						"DiffviewStatusModified",
+						"DiffviewStatusRenamed",
+						"DiffviewStatusCopied",
+						"DiffviewStatusTypeChange",
+						"DiffviewStatusUnmerged",
+					},
+					deleted = {
+						"DiffviewStatusDeleted",
+						"DiffviewStatusBroken",
+						"DiffviewStatusUnknown",
+						"DiffviewFilePanelDeletions",
+					},
+				}
+				local palette = { added = "#86a586", modified = "#c0a374", deleted = "#b08080" }
+				for kind, names in pairs(groups) do
+					for _, name in ipairs(names) do
+						vim.api.nvim_set_hl(0, name, { fg = palette[kind] })
+					end
+				end
+			end
+
+			apply_diffview_hl()
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				group = vim.api.nvim_create_augroup("DiffviewStatusColors", { clear = true }),
+				callback = apply_diffview_hl,
+			})
 
 			local augroup = vim.api.nvim_create_augroup("DiffviewAutoRefresh", { clear = true })
 
