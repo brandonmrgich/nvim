@@ -222,7 +222,7 @@ nnoremap <leader>T  :tabp<CR>
 " -----------------------------------------------------------------------------
 " Terminal (vim 8+ :terminal)
 " -----------------------------------------------------------------------------
-if has('terminal')
+if exists(':terminal')
     tnoremap jk    <C-\><C-n>
     tnoremap <C-h> <C-\><C-n>:wincmd h<CR>
     tnoremap <C-j> <C-\><C-n>:wincmd j<CR>
