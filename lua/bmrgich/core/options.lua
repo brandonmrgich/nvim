@@ -6,6 +6,15 @@ local opt = vim.opt
 vim.g.python3_host_prog = vim.fn.stdpath("config") .. "/venv/bin/python3"
 vim.g.perl_host_prog = vim.fn.exepath("perl")
 
+-- .NET runtime location for nvim-spawned tools (csharpier). On Apple Silicon
+-- the Homebrew dotnet apphost otherwise resolves to a stale x64 install under
+-- /usr/local/share/dotnet and dies on an arch mismatch. Guarded so the config
+-- stays portable on machines without the Homebrew dotnet.
+local dotnet_root = "/opt/homebrew/opt/dotnet/libexec"
+if vim.fn.isdirectory(dotnet_root) == 1 then
+	vim.env.DOTNET_ROOT = dotnet_root
+end
+
 -------------------------------------------------------------------------------
 -- Global vim settings
 -------------------------------------------------------------------------------
@@ -112,6 +121,13 @@ opt.updatetime = 200
 opt.undofile = true
 opt.undolevels = 10000
 opt.swapfile = false
+
+-- Overwrite files in place (preserve inode) instead of the default
+-- write-temp-then-rename. The rename churns inode/mtime and desyncs Unity's
+-- macOS asset DB: every save then needs a manual Reimport and throws
+-- "SourceAssetDB has modification time X while content on disk has Y".
+-- Bonus: in-place writes preserve symlinks, keeping stow-managed files intact.
+opt.backupcopy = "yes"
 opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 
 -- Shortmess
