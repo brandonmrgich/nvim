@@ -57,25 +57,25 @@ opt.backspace = "indent,eol,start"
 -- quirks — nvim → OSC 52 → tmux → terminal → system clipboard), otherwise
 -- let nvim auto-detect (pbcopy on macOS, xclip/wl-copy on Linux).
 if vim.env.SSH_TTY then
-  opt.clipboard = ""
+	opt.clipboard = ""
 else
-  if vim.env.TMUX then
-    local ok, osc52 = pcall(require, "vim.ui.clipboard.osc52")
-    if ok then
-      vim.g.clipboard = {
-        name = "OSC 52",
-        copy = {
-          ["+"] = osc52.copy("+"),
-          ["*"] = osc52.copy("*"),
-        },
-        paste = {
-          ["+"] = osc52.paste("+"),
-          ["*"] = osc52.paste("*"),
-        },
-      }
-    end
-  end
-  opt.clipboard = "unnamedplus"
+	if vim.env.TMUX then
+		local ok, osc52 = pcall(require, "vim.ui.clipboard.osc52")
+		if ok then
+			vim.g.clipboard = {
+				name = "OSC 52",
+				copy = {
+					["+"] = osc52.copy("+"),
+					["*"] = osc52.copy("*"),
+				},
+				paste = {
+					["+"] = osc52.paste("+"),
+					["*"] = osc52.paste("*"),
+				},
+			}
+		end
+	end
+	opt.clipboard = "unnamedplus"
 end
 opt.completeopt = "menu,menuone,noselect"
 opt.confirm = true
