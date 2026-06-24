@@ -39,6 +39,17 @@ local servers = {
 		end,
 	},
 	dockerls = {},
+	-- C# (Unity). OmniSharp ships self-contained via Mason, so no system
+	-- .NET is required for the LSP. Open nvim at the folder holding the
+	-- Unity-generated .sln so the project resolves.
+	omnisharp = {
+		settings = {
+			RoslynExtensionsOptions = {
+				EnableAnalyzersSupport = true,
+				EnableImportCompletion = true,
+			},
+		},
+	},
 }
 
 return {
@@ -322,7 +333,7 @@ return {
 					c = { "clang_format" },
 					java = { "google_java_format" },
 					objectivec = { "clang_format" },
-					csharp = has_csharpier and { "csharpier" } or {},
+					cs = has_csharpier and { "csharpier" } or {},
 					sh = { "shfmt" },
 					zsh = { "shfmt" },
 				},

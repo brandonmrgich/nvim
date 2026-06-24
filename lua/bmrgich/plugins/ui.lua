@@ -32,6 +32,7 @@ return {
 					"bash",
 					"c",
 					"cpp",
+					"c_sharp",
 					"css",
 					"dockerfile",
 					"graphql",
