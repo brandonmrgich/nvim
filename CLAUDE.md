@@ -147,15 +147,21 @@ The Python3 provider points to a local venv:
 
 ### Terminal Rendering (tmux)
 
-Neovim 0.10+ wraps TUI redraws in synchronized-output escapes (DECSET 2026)
-to prevent tearing. Inside tmux this can get stuck mid-sync, leaving the
-bufferline and buffer text blank until an unrelated event (cursor move)
-forces a repaint — `:redraw!` does not fix it. Symptom is tmux-specific; a
-bare nvim session outside tmux is unaffected.
+Neovim's `'termsync'` option (default on) wraps TUI redraws in
+synchronized-output escapes (DECSET 2026) to prevent tearing. Inside tmux
+this can get stuck mid-sync, leaving the bufferline and buffer text blank
+— triggers include opening a buffer or splitting a window — until an
+unrelated event (switching tmux panes, or cursor movement) forces a
+repaint. `:redraw!` does not fix it. Symptom is tmux-specific; a bare nvim
+session outside tmux is unaffected.
 
-Fixed at the tmux layer, not in this repo: `~/dotfiles/tmux/.config/tmux/tmux.conf`
-sets `terminal-overrides ',*:Sync@'` to strip the Sync capability, forcing
-nvim to fall back to unsynchronized (immediate) drawing. See dotfiles `v4.3`.
+Fixed in `core/options.lua`: `opt.termsync = false` when `$TMUX` is set,
+disabling synchronized-output entirely inside tmux. A tmux-side attempt
+first (stripping the terminfo `Sync` capability via `terminal-overrides`)
+did **not** work — tmux answers nvim's DECRQM capability query as
+supported regardless of that override, since it negotiates sync with inner
+clients via direct escape-sequence query/response, not terminfo. See
+dotfiles `v4.4` (reverts the ineffective `v4.3` tmux fix) and nvim `v3.12`.
 
 ### Health Check
 

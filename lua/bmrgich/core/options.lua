@@ -152,6 +152,15 @@ opt.termguicolors = true
 opt.background = "dark"
 opt.signcolumn = "yes"
 
+-- Synchronized-output redraws ('termsync', default on) get stuck mid-sync
+-- when nvim runs inside tmux: tmux answers nvim's terminal capability query
+-- (DECRQM mode 2026) as supported regardless of terminfo overrides, so
+-- panes render blank until an unrelated event forces a repaint. Confined to
+-- tmux — a bare nvim session outside it isn't affected.
+if vim.env.TMUX then
+	opt.termsync = false
+end
+
 -- Split windows
 opt.splitright = true
 opt.splitbelow = true
