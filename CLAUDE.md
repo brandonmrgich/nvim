@@ -145,6 +145,18 @@ The Python3 provider points to a local venv:
 - **Tmux (`$TMUX` set, not SSH):** force OSC 52 provider via `vim.ui.clipboard.osc52`. Path is nvim → OSC 52 → tmux → terminal → system clipboard, robust against pbcopy/xclip auto-detection quirks. Requires `set -g set-clipboard on` in tmux and an OSC-52-capable terminal (iTerm2, kitty, WezTerm, Ghostty — *not* Apple Terminal.app).
 - **Otherwise:** nvim auto-detects (pbcopy on macOS, xclip/wl-copy on Linux).
 
+### Terminal Rendering (tmux)
+
+Neovim 0.10+ wraps TUI redraws in synchronized-output escapes (DECSET 2026)
+to prevent tearing. Inside tmux this can get stuck mid-sync, leaving the
+bufferline and buffer text blank until an unrelated event (cursor move)
+forces a repaint — `:redraw!` does not fix it. Symptom is tmux-specific; a
+bare nvim session outside tmux is unaffected.
+
+Fixed at the tmux layer, not in this repo: `~/dotfiles/tmux/.config/tmux/tmux.conf`
+sets `terminal-overrides ',*:Sync@'` to strip the Sync capability, forcing
+nvim to fall back to unsynchronized (immediate) drawing. See dotfiles `v4.3`.
+
 ### Health Check
 
 Run `:checkhealth bmrgich` to verify:
