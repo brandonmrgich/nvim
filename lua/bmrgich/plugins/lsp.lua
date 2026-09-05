@@ -332,6 +332,11 @@ return {
 					cpp = { "clang_format" },
 					c = { "clang_format" },
 					java = { "google_java_format" },
+					-- Dart formatting comes from dartls (`dart format` semantics)
+					-- over LSP. Routing it through conform as an external
+					-- formatter would spawn a fresh Dart VM per save; the
+					-- analysis server is already running and formats instantly.
+					dart = { lsp_format = "prefer" },
 					objectivec = { "clang_format" },
 					cs = has_csharpier and { "csharpier" } or {},
 					sh = { "shfmt" },
@@ -581,6 +586,85 @@ return {
 					vim.defer_fn(jdtls_setup, 0)
 				end,
 			})
+		end,
+	},
+
+	-- flutter-tools: Dart/Flutter LSP, hot reload, and device control.
+	--
+	-- dartls is deliberately NOT in the `servers` table at the top of this
+	-- file. That table drives mason-lspconfig's `ensure_installed`, and dartls
+	-- is not a Mason package — it ships inside the Flutter SDK and launches as
+	-- `dart language-server`. Listing it there would make Mason retry a
+	-- nonexistent package on every startup.
+	--
+	-- flutter-tools v3.x starts the server itself via `vim.lsp.start` with no
+	-- nvim-lspconfig coupling, so it coexists with the vim.lsp.config /
+	-- vim.lsp.enable block above rather than fighting it.
+	{
+		"akinsho/flutter-tools.nvim",
+		ft = "dart",
+		dependencies = { "nvim-lua/plenary.nvim", "stevearc/dressing.nvim" },
+		keys = {
+			{ "<leader>Fr", "<cmd>FlutterRun<CR>", desc = "Flutter: run app" },
+			{ "<leader>Fq", "<cmd>FlutterQuit<CR>", desc = "Flutter: quit running app" },
+			{ "<leader>Fl", "<cmd>FlutterReload<CR>", desc = "Flutter: hot reload" },
+			{ "<leader>FR", "<cmd>FlutterRestart<CR>", desc = "Flutter: hot restart" },
+			{ "<leader>Fd", "<cmd>FlutterDevices<CR>", desc = "Flutter: select device" },
+			{ "<leader>Fe", "<cmd>FlutterEmulators<CR>", desc = "Flutter: select emulator" },
+			{ "<leader>Fo", "<cmd>FlutterOutlineToggle<CR>", desc = "Flutter: toggle widget outline" },
+			{ "<leader>FD", "<cmd>FlutterDevTools<CR>", desc = "Flutter: start DevTools" },
+			{ "<leader>Fc", "<cmd>FlutterLogClear<CR>", desc = "Flutter: clear dev log" },
+		},
+		opts = function()
+			return {
+				-- Flutter is found via PATH. $FLUTTER_ROOT/bin is exported from
+				-- ~/.zshenv rather than ~/.zsh/env.zsh precisely so the
+				-- non-interactive shell nvim spawns inherits it.
+				fvm = false,
+
+				ui = { border = "rounded", notification_style = "native" },
+
+				decorations = {
+					statusline = { app_version = true, device = true, project_config = true },
+				},
+
+				-- `flutter run` output lands in a bottom split. Hot reload is
+				-- driven by the keymaps above, so this stays scrollback rather
+				-- than an interactive prompt.
+				dev_log = {
+					enabled = true,
+					notify_errors = false,
+					open_cmd = "botright 15split",
+				},
+
+				dev_tools = { autostart = false, auto_open_browser = false },
+				outline = { open_cmd = "30vnew", auto_open = false },
+
+				lsp = {
+					-- Same capabilities every other server here receives, so
+					-- nvim-cmp behaves identically in Dart buffers.
+					capabilities = require("cmp_nvim_lsp").default_capabilities(),
+
+					-- No on_attach: the LspAttach autocmd in the nvim-lspconfig
+					-- spec above already binds gd/gR/gi/gt/K/<leader>ca/<leader>rn
+					-- and [d/]d for every attached client, dartls included.
+
+					settings = {
+						showTodos = true,
+						completeFunctionCalls = true,
+						renameFilesWithClasses = "prompt",
+						enableSnippets = true,
+						updateImportsOnRename = true,
+						-- Keep the analyzer off the SDK's own sources and the
+						-- global pub cache: indexing them costs seconds of
+						-- startup and raises diagnostics for code we don't own.
+						analysisExcludedFolders = {
+							vim.fn.expand("$FLUTTER_ROOT/packages"),
+							vim.fn.expand("$HOME/.pub-cache"),
+						},
+					},
+				},
+			}
 		end,
 	},
 }

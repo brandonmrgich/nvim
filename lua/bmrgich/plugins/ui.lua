@@ -34,6 +34,7 @@ return {
 					"cpp",
 					"c_sharp",
 					"css",
+					"dart",
 					"dockerfile",
 					"graphql",
 					"html",
