@@ -93,7 +93,7 @@ return {
 				"isort",
 				"shfmt",
 				"yamlfmt",
-				"google-java-format",
+				"google-java-format", -- unused by default (Java uses clang_format_java); kept installed for the commented alternative
 				"beautysh",
 				"clang-format",
 				-- Linters
@@ -331,7 +331,12 @@ return {
 					python = { "isort", "black" },
 					cpp = { "clang_format" },
 					c = { "clang_format" },
-					java = { "google_java_format" },
+					java = { "clang_format_java" },
+					-- Alternative: Google Java Style via google-java-format. Not configurable,
+					-- so it always splits one-line methods. To switch back, use this line and
+					-- the commented `google-java-format` override in `formatters` below.
+					-- (Note the hyphens: conform has no `google_java_format` alias.)
+					-- java = { "google-java-format" },
 					-- Dart formatting comes from dartls (`dart format` semantics)
 					-- over LSP. Routing it through conform as an external
 					-- formatter would spawn a fresh Dart VM per save; the
@@ -369,6 +374,24 @@ return {
 					shfmt = {
 						args = { "-i", "4" },
 					},
+					-- Java via clang-format, not google-java-format: GJF can't keep short
+					-- methods on one line (`int get() { return x; }`). Java-only, so
+					-- C/C++ keep plain clang_format. Annotated methods still expand
+					-- (clang-format limitation).
+					clang_format_java = {
+						inherit = "clang-format",
+						prepend_args = {
+							"--style={BasedOnStyle: Google, IndentWidth: 4, ContinuationIndentWidth: 8, "
+								.. "ColumnLimit: 100, AllowShortFunctionsOnASingleLine: All, "
+								.. "AllowShortIfStatementsOnASingleLine: WithoutElse, "
+								.. "AllowShortLoopsOnASingleLine: true, AllowShortBlocksOnASingleLine: Never}",
+						},
+					},
+					-- 4-space (AOSP) variant of google-java-format; pairs with the
+					-- commented `java = { "google-java-format" }` above.
+					-- ["google-java-format"] = {
+					-- 	prepend_args = { "--aosp" },
+					-- },
 				},
 			})
 
