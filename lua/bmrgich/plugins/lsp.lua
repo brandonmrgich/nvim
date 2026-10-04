@@ -77,6 +77,10 @@ return {
 		opts = {
 			ensure_installed = vim.tbl_keys(servers),
 			automatic_installation = true,
+			-- jdtls is started by the nvim-jdtls block below. Auto-enabling it here
+			-- launched a second client through Mason's Python wrapper, which reads
+			-- JAVA_HOME (Java 17 on this machine) and exits: "requires at least Java 21".
+			automatic_enable = { exclude = { "jdtls" } },
 		},
 	},
 
@@ -526,9 +530,21 @@ return {
 					return
 				end
 
+				-- jdtls needs Java 21+ to run, independent of the project's Java version.
+				-- JAVA_HOME / PATH java may be older (zulu-17 here), so on macOS ask
+				-- java_home for a 21+ JDK first and fall back to PATH java.
 				local sysname = (vim.uv or vim.loop).os_uname().sysname
 				local java_exec = sysname == "Windows_NT" and "java.exe" or "java"
-				local java_path = vim.fn.exepath(java_exec)
+				local java_path = ""
+				if vim.fn.executable("/usr/libexec/java_home") == 1 then
+					local home = vim.trim(vim.fn.system({ "/usr/libexec/java_home", "-v", "21+" }))
+					if vim.v.shell_error == 0 and vim.fn.executable(home .. "/bin/java") == 1 then
+						java_path = home .. "/bin/java"
+					end
+				end
+				if java_path == "" then
+					java_path = vim.fn.exepath(java_exec)
+				end
 				if java_path == "" then
 					vim.notify("Java executable not found in PATH.", vim.log.levels.ERROR)
 					return
